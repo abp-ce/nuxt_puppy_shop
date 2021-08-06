@@ -21,6 +21,7 @@ export default {
         selNode: {
             get() {
                 if (!this.opened.includes(this.$store.state.selNode) && this.$store.state.selNode.id <= 0) this.opened.push(this.$store.state.selNode)
+                if (this.$store.state.selNode.id > 0 && !this.opened.includes(this.$store.getters.upper)) this.opened.push(this.$store.getters.upper)
                 return [this.$store.state.selNode]
             },
             set(value) {

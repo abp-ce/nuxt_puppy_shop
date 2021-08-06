@@ -3,7 +3,7 @@
         <v-col cols="12" sm="8" md="6">
             <v-card>
                 <v-card-title>{{ item.name }}</v-card-title>
-                <v-card-subtitle>{{ parent.name }}</v-card-subtitle>
+                <v-card-subtitle>{{ upper.name }}</v-card-subtitle>
             </v-card>
             <v-carousel>
                 <v-carousel-item v-for="n in 5" :key="n">
@@ -11,10 +11,12 @@
                 </v-carousel-item>
             </v-carousel>
             <v-card-text>
-                <p v-for="(dt,name) in details" :key="name">{{name}}: {{ dt }}</p>
+                {{ text }}
             </v-card-text>
             <v-card-actions>
                 <v-btn text @click="up">Вверх</v-btn>
+                <v-btn v-if="details['mam']" text @click="parent(details['mamID'])">{{details['mam']}}</v-btn> 
+                <v-btn v-if="details['dad']" text @click="parent(details['dadID'])">{{details['dad']}}</v-btn> 
             </v-card-actions>
         </v-col>
     </v-row>
@@ -22,13 +24,23 @@
 
 <script>
 export default {
-    data: () => ({ details: {} }),
+    data: () => ({ details: { nick: 'nick', birthday: 'birthday', breed: 'breed', subbreed: 'subbreed', mam: 'mam', dad: 'dad' } }),
     computed: {
         item: function() {
             return this.$store.state.selNode
         },
-        parent: function() {
-            return this.$store.getters.getParent
+        upper: function() {
+            return this.$store.getters.upper
+        },
+        text: function() {
+            let str = ""
+            if (this.details['nick']) str += "Кличка: " + this.details['nick'] + ". "
+            if (this.details['birthday']) str += "Дата рождения: " + this.details['birthday'] + ". "
+            if (this.details['breed']) str += "Порода: " + this.details['breed'] + ". "
+            if (this.details['subbreed']) str += "Уточнение: " + this.details['subbreed'] + ". "
+            if (this.details['mam']) str += "Мать: " + this.details['mam'] + ". "
+            if (this.details['dad']) str += "Отец: " + this.details['dad'] + ". "
+            return str
         }
     },
     watch: {
@@ -38,14 +50,19 @@ export default {
     },
     methods: {
         up: function() {
-            this.$store.commit('setSelNode', this.parent)
+            this.$store.commit('setSelNode', this.upper)
+        },
+        parent: function(id) {
+            console.log(id)
+            this.$store.dispatch('setParent', id)
         }
     },
     async fetch() {
-        console.log(this.$nuxt.context.store.state.selNode.id)
+        //console.log(this.$nuxt.context.store.state.selNode.id)
+        //const deflt = { nick: 'nick', birthday: 'birthday', breed: 'breed', subbreed: 'subbreed', mam: 'mam', dad: 'dad' }
         if (!this.$nuxt.context.store.state.selNode.id || this.$nuxt.context.store.state.selNode.id <= 0) {
-            this.details = { nick: 'nick', birthday: 'birthday', breed: 'breed', subbreed: 'subbreed', mam: 'mam', dad: 'dad' }
-            console.log(this.details)
+            //this.details = deflt
+            //console.log(this.details)
             return
         }
         const jsn = JSON.stringify({ "id": this.$nuxt.context.store.state.selNode.id });
@@ -59,11 +76,10 @@ export default {
             body: jsn
         })
         const rsp = await response.json()
-        console.log(rsp)
-        console.log(rsp['birthday'])
-        if (rsp) this.details = ({ nick: rsp['nick'], birthday: rsp['birthday'], 
-                        breed: rsp['breed'], subbreed: rsp['subbreed'], mam: rsp['mam'], dad: rsp['dad']})
-        else this.details = { nick: 'nick', birthday: 'birthday', breed: 'breed', subbreed: 'subbreed', mam: 'mam', dad: 'dad' } 
+        //console.log(rsp)
+        //console.log(rsp['birthday'])
+        if (rsp) this.details = rsp
+        //else this.details = deflt
     },
     fetchOnServer: false
 }

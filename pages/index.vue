@@ -4,7 +4,7 @@
             <v-col v-for="item in items" :key="item.id" cols="12" md="4">
                 <v-card>
                     <v-card-title>{{ item.name }}</v-card-title>
-                    <v-card-subtitle>{{ parent.name }} - {{ selNode.name }}</v-card-subtitle>
+                    <v-card-subtitle>{{ upper.name }} - {{ selNode.name }}</v-card-subtitle>
                     <v-img :src="item.photo"></v-img>
                     <v-card-actions>
                         <v-btn text @click="show(item)">Показать</v-btn>
@@ -25,8 +25,8 @@ export default {
         items: function() {
             return this.$store.state.selNode.children
         },
-        parent: function() {
-            return this.$store.getters.getParent
+        upper: function() {
+            return this.$store.getters.upper
         }
     },
     methods: {
@@ -35,7 +35,7 @@ export default {
             this.$store.commit('setSelNode', item)
         },
         up: function() {
-            this.$store.commit('setSelNode', this.parent)
+            this.$store.commit('setSelNode', this.upper)
         }
     }
 }
