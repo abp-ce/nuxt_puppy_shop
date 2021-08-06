@@ -15,8 +15,8 @@
             </v-card-text>
             <v-card-actions>
                 <v-btn text @click="up">Вверх</v-btn>
-                <v-btn v-if="details['mam']" text @click="parent(details['mamID'])">{{details['mam']}}</v-btn> 
-                <v-btn v-if="details['dad']" text @click="parent(details['dadID'])">{{details['dad']}}</v-btn> 
+                <v-btn v-if="details['mam']" text @click="parent(details['mamID'])">Мать</v-btn> 
+                <v-btn v-if="details['dad']" text @click="parent(details['dadID'])">Отец</v-btn> 
             </v-card-actions>
         </v-col>
     </v-row>
@@ -24,7 +24,7 @@
 
 <script>
 export default {
-    data: () => ({ details: { nick: 'nick', birthday: 'birthday', breed: 'breed', subbreed: 'subbreed', mam: 'mam', dad: 'dad' } }),
+    data: () => ({ details: { nick: 'nick', birthday: 'birthday', gender: 'gender', breed: 'breed', subbreed: 'subbreed', mam: 'mam', dad: 'dad' } }),
     computed: {
         item: function() {
             return this.$store.state.selNode
@@ -34,8 +34,10 @@ export default {
         },
         text: function() {
             let str = ""
+            let gnd = { 'м': 'Кобель', 'д': 'Сука'}
             if (this.details['nick']) str += "Кличка: " + this.details['nick'] + ". "
             if (this.details['birthday']) str += "Дата рождения: " + this.details['birthday'] + ". "
+            if (this.details['gender']) str += gnd[this.details['gender']] + ". "
             if (this.details['breed']) str += "Порода: " + this.details['breed'] + ". "
             if (this.details['subbreed']) str += "Уточнение: " + this.details['subbreed'] + ". "
             if (this.details['mam']) str += "Мать: " + this.details['mam'] + ". "
@@ -58,13 +60,7 @@ export default {
         }
     },
     async fetch() {
-        //console.log(this.$nuxt.context.store.state.selNode.id)
-        //const deflt = { nick: 'nick', birthday: 'birthday', breed: 'breed', subbreed: 'subbreed', mam: 'mam', dad: 'dad' }
-        if (!this.$nuxt.context.store.state.selNode.id || this.$nuxt.context.store.state.selNode.id <= 0) {
-            //this.details = deflt
-            //console.log(this.details)
-            return
-        }
+        if (!this.$nuxt.context.store.state.selNode.id || this.$nuxt.context.store.state.selNode.id <= 0) return
         const jsn = JSON.stringify({ "id": this.$nuxt.context.store.state.selNode.id });
         console.log(jsn)
         const response = await fetch('https://abp-oci1.tk/details', {
