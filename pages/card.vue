@@ -7,7 +7,7 @@
             </v-card>
             <v-carousel>
                 <v-carousel-item v-for="n in 5" :key="n">
-                    <v-img src="item.photo"></v-img>
+                    <v-img :src="item.photo"></v-img>
                 </v-carousel-item>
             </v-carousel>
             <v-card-text>
