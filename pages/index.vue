@@ -5,7 +5,7 @@
                 <v-card>
                     <v-card-title>{{ item.name }}</v-card-title>
                     <v-card-subtitle>{{ upper.name }} - {{ selNode.name }}</v-card-subtitle>
-                    <v-img :src="item.photo"></v-img>
+                    <v-img src="item.photo"></v-img>
                     <v-card-actions>
                         <v-btn text @click="show(item)">Показать</v-btn>
                         <v-btn text @click="up">Вверх</v-btn>
