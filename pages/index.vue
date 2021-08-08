@@ -36,8 +36,6 @@ export default {
     },
     methods: {
         show: function(item) {
-            //console.log(item.name)
-            console.log(this.$config.baseURL)
             this.$store.commit('setSelNode', item)
         },
         up: function() {

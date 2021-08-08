@@ -7,7 +7,7 @@
             </v-card>
             <v-carousel>
                 <v-carousel-item v-for="n in 5" :key="n">
-                    <v-img :src="item.photo"></v-img>
+                    <v-img :src="pref + item.photo"></v-img>
                 </v-carousel-item>
             </v-carousel>
             <v-card-text>
@@ -24,7 +24,12 @@
 
 <script>
 export default {
-    data: () => ({ details: { nick: 'nick', birthday: 'birthday', gender: 'gender', breed: 'breed', subbreed: 'subbreed', mam: 'mam', dad: 'dad' } }),
+    data: function() {
+        return {
+            details: { nick: 'nick', birthday: 'birthday', gender: 'gender', breed: 'breed', subbreed: 'subbreed', mam: 'mam', dad: 'dad' },
+            pref: this.$config.baseURL
+        }
+    },
     computed: {
         item: function() {
             return this.$store.state.selNode
